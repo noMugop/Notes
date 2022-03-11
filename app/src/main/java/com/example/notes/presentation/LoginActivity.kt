@@ -3,8 +3,9 @@ package com.example.notes.presentation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.notes.data.network.ApiFactory
+import com.example.notes.data.network.module.TokenDto
 import com.example.notes.databinding.ActivityLoginBinding
-import com.example.notes.domain.entity.UserInfo
+import com.example.notes.domain.entity.LoginRequest
 import kotlinx.coroutines.*
 
 class LoginActivity : AppCompatActivity() {
@@ -13,7 +14,7 @@ class LoginActivity : AppCompatActivity() {
         ActivityLoginBinding.inflate(layoutInflater)
     }
 
-    private lateinit var token: Any
+    private lateinit var token: TokenDto
     private lateinit var profile: Any
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,18 +22,18 @@ class LoginActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        val user = UserInfo("testalina@mailsecv.com", "1q2w3e4r5t")
+        val user = LoginRequest("testalina@mailsecv.com", "1q2w3e4r5t")
         val apiFactory = RemoteDataSourceImpl(ApiFactory())
         val apiService = apiFactory.getApiService()
 
         runBlocking {
             val request = launch {
                 delay(500)
-                token = apiService.authorization(user)
-                profile = apiService.getProfile(token.toString())
+                token = apiService.getToken(user)
+                profile = apiService.getProfile(token.token)
             }
             request.join()
-            println("Token: ${token}")
+            println("Token: ${token.token}")
             println("Profile: ${profile}")
         }
     }

@@ -1,18 +1,16 @@
 package com.example.notes.data.network
 
-import com.example.notes.domain.entity.UserInfo
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import com.example.notes.data.network.module.TokenDto
+import com.example.notes.domain.entity.LoginRequest
+import retrofit2.http.*
 
 interface ApiService {
 
     @POST("auth")
-    suspend fun<T> authorization(@Body userData: UserInfo): T
+    suspend fun getToken(@Body userData: LoginRequest): TokenDto
 
     @GET("profile")
     suspend fun<T> getProfile(
-        @Query("token") token: Any
+        @Header("Authorization") auth: String
     ): T
 }

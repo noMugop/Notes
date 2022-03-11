@@ -2,7 +2,7 @@ package com.example.notes.domain.entity
 
 import com.google.gson.annotations.SerializedName
 
-data class UserInfo(
+data class LoginRequest(
     @SerializedName("email")
     val email: String,
     @SerializedName("password")
