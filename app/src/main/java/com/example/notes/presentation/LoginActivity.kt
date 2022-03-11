@@ -1,18 +1,11 @@
 package com.example.notes.presentation
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.util.Log
-import android.widget.Toast
 import com.example.notes.data.network.ApiFactory
-import com.example.notes.data.network.ApiService
-import com.example.notes.data.network.module.ResultDto
 import com.example.notes.databinding.ActivityLoginBinding
 import com.example.notes.domain.entity.UserInfo
 import kotlinx.coroutines.*
-import javax.inject.Inject
 
 class LoginActivity : AppCompatActivity() {
 
@@ -20,7 +13,8 @@ class LoginActivity : AppCompatActivity() {
         ActivityLoginBinding.inflate(layoutInflater)
     }
 
-    private lateinit var result: ResultDto
+    private lateinit var token: Any
+    private lateinit var profile: Any
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,14 +28,12 @@ class LoginActivity : AppCompatActivity() {
         runBlocking {
             val request = launch {
                 delay(500)
-                result = apiService.authorization(user)
+                token = apiService.authorization(user)
+                profile = apiService.getProfile(token.toString())
             }
             request.join()
-            if (result != null) {
-                println("Result + ${result.token}")
-            } else {
-                println("Error")
-            }
+            println("Token: ${token}")
+            println("Profile: ${profile}")
         }
     }
 }
