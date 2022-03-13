@@ -1,4 +1,4 @@
-package com.example.notes.di
+package com.example.notes.di.annotations
 
 import javax.inject.Scope
 

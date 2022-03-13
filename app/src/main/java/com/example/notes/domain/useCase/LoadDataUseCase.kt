@@ -1,9 +1,11 @@
 package com.example.notes.domain.useCase
 
-import com.example.notes.domain.NotesRepository
+import com.example.notes.data.database.module.ProfileDbModel
+import com.example.notes.domain.ProfileRepository
+import com.example.notes.domain.entity.Profile
 import javax.inject.Inject
 
-class LoadDataUseCase @Inject constructor(private val repository: NotesRepository) {
+class LoadDataUseCase @Inject constructor(private val repository: ProfileRepository) {
 
-    operator fun invoke() = repository.loadData()
+    suspend operator fun invoke(profile: Profile) = repository.loadData(profile)
 }

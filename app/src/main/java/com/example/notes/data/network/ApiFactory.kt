@@ -8,60 +8,14 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 
-class ApiFactory {
+object ApiFactory {
 
-    fun getInstance(): ApiService {
+    private const val BASE_URL = "https://dev-api.ringapp.me/"
 
-        apiService?.let { return it }
+    private val retrofit = Retrofit.Builder()
+        .addConverterFactory(GsonConverterFactory.create())
+        .baseUrl(BASE_URL)
+        .build()
 
-        synchronized(LOCK) {
-            apiService?.let { return it }
-
-            val logging = OAuthInterceptor("Bearer", "---ACCESS---TOKEN---")
-
-            val client = OkHttpClient
-                .Builder()
-                .addInterceptor(logging)
-                .build()
-
-            val gson = GsonBuilder()
-                .setLenient()
-                .create()
-
-            val instance = Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .baseUrl(BASE_URL)
-                .client(client)
-                .build()
-
-            retrofit = instance
-            apiService = instance.create(ApiService::class.java)
-            return apiService as ApiService
-        }
-    }
-
-    companion object {
-
-        private var retrofit: Retrofit? = null
-
-        private var apiService: ApiService? = null
-
-        private const val BASE_URL = "https://dev-api.ringapp.me/"
-
-        private val LOCK = Any()
-    }
-
-    class OAuthInterceptor(
-        private val tokenType: String, private val accessToken: String
-        ): Interceptor {
-
-        override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
-            var request = chain.request()
-            request = request.newBuilder()
-                .header("Authorization", "$tokenType $accessToken")
-                .build()
-
-            return chain.proceed(request)
-        }
-    }
+    val apiService = retrofit.create(ApiService::class.java)
 }

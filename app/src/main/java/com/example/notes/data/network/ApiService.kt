@@ -1,16 +1,17 @@
 package com.example.notes.data.network
 
+import com.example.notes.data.network.module.ProfileDto
 import com.example.notes.data.network.module.TokenDto
-import com.example.notes.domain.entity.LoginRequest
+import com.example.notes.data.network.module.LoginRequestDto
 import retrofit2.http.*
 
 interface ApiService {
 
     @POST("auth")
-    suspend fun getToken(@Body userData: LoginRequest): TokenDto
+    suspend fun getToken(@Body userData: LoginRequestDto): TokenDto
 
     @GET("profile")
-    suspend fun<T> getProfile(
-        @Header("Authorization") auth: String
-    ): T
+    suspend fun getProfile(
+        @Header("Authorization") token: String
+    ): ProfileDto
 }
