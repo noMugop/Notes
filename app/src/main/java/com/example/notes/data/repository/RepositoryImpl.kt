@@ -37,7 +37,7 @@ class RepositoryImpl @Inject constructor(
 
     override fun getProfileById(id: String): LiveData<Profile> {
         return Transformations.map(profileDao.getProfileById(id)) {
-             mapper.mapDbModelToProfile(it)
+            mapper.mapDbModelToProfile(it)
         }
     }
 
@@ -73,8 +73,14 @@ class RepositoryImpl @Inject constructor(
             if (result is Result.Success && result != null) {
                 val profile = mapper.mapDtoToProfile(profileDto as ProfileDto)
                 loadData(profile)
+                resultLocal = profile
             }
         }
         return result as Result<Profile>
+    }
+
+    companion object {
+
+        var resultLocal: Profile? = null
     }
 }

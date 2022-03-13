@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.notes.R
 import com.example.notes.databinding.ProfileFragmentBinding
+import com.example.notes.domain.entity.Profile
 import com.example.notes.presentation.viewModel.ProfileFragmentViewModel
 import com.example.notes.presentation.viewModel.ViewModelFactory
 import java.lang.RuntimeException
@@ -19,6 +20,7 @@ import javax.inject.Inject
 class ProfileFragment : Fragment() {
 
     private lateinit var viewModel: ProfileFragmentViewModel
+    private lateinit var profile: Profile
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -36,6 +38,11 @@ class ProfileFragment : Fragment() {
     private val binding: ProfileFragmentBinding
         get() = _binding ?: throw RuntimeException("ProfileFragmentBinding is null")
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        parseArgs()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -48,24 +55,35 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this, viewModelFactory)[ProfileFragmentViewModel::class.java]
-        viewModel.getProfileList().observe(viewLifecycleOwner, {
-            it.map {
-                binding.tvName.text = it.name
-                binding.tvEmail.text = it.email
-                binding.tvPhone.text = it.phone
-                binding.tvPosition.text = it.position
-            }
-        })
+
+        binding.tvName.text = profile.name
+        binding.tvEmail.text = profile.email
+        binding.tvPhone.text = profile.phone
+        binding.tvPosition.text = profile.position
+
         binding.ivExit.setOnClickListener {
             requireActivity().finish()
         }
     }
 
+    private fun parseArgs() {
+
+        requireArguments().getParcelable<Profile>(ARG_KEY)?.let {
+            profile = it
+        }
+    }
+
     companion object {
 
-        fun newInstance(): Fragment {
-            return ProfileFragment()
+        fun newInstance(profile: Profile): Fragment {
+            return ProfileFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable(ARG_KEY, profile)
+                }
+            }
         }
+
+        private const val ARG_KEY = "Argument"
 
         const val NAME = "ProfileFragment"
     }

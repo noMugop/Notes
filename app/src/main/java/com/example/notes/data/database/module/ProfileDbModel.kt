@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName
 data class ProfileDbModel (
 
     @PrimaryKey(autoGenerate = false)
-    val id: String = "",
+    val id: String,
     val name: String,
     val email: String,
     val phone: String,

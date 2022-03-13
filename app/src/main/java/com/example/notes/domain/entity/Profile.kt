@@ -1,8 +1,12 @@
 package com.example.notes.domain.entity
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Profile(
 
-    val id: String = "",
+    val id: String,
     val name: String,
     val email: String,
     val phone: String,
@@ -12,4 +16,4 @@ data class Profile(
     val nameEng: String,
     val timezone: String,
     val alertEmail: String
-)
+): Parcelable

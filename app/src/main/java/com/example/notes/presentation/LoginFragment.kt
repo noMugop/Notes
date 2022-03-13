@@ -17,11 +17,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.notes.R
+import com.example.notes.data.repository.RepositoryImpl
 import com.example.notes.databinding.LoginFragmentBinding
+import com.example.notes.domain.entity.Profile
 import com.example.notes.presentation.models.LoginResult
 import com.example.notes.presentation.models.Result
 import com.example.notes.presentation.viewModel.LoginFragmentViewModel
 import com.example.notes.presentation.viewModel.ViewModelFactory
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.lang.Exception
 import java.lang.RuntimeException
 import javax.inject.Inject
@@ -111,7 +115,7 @@ class LoginFragment : Fragment() {
 
                 }
                 if (viewModel.loginResult.value?.error != R.string.login_failed) {
-                    callProfileFragment()
+                    launchProfileFragment(RepositoryImpl.resultLocal as Profile)
                 } else {
                     Toast.makeText(requireContext(), R.string.login_failed, Toast.LENGTH_SHORT)
                         .show()
@@ -141,9 +145,9 @@ class LoginFragment : Fragment() {
         )
     }
 
-    private fun callProfileFragment() {
+    private fun launchProfileFragment(profile: Profile) {
         requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.main_container, ProfileFragment.newInstance())
+            .replace(R.id.main_container, ProfileFragment.newInstance(profile))
             .addToBackStack(ProfileFragment.NAME)
             .commit()
     }

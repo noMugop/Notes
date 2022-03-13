@@ -6,7 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.notes.R
 import com.example.notes.domain.entity.Profile
+import com.example.notes.domain.useCase.GetProfileByIdUseCase
 import com.example.notes.domain.useCase.GetProfileListUseCase
+import com.example.notes.domain.useCase.LoadDataUseCase
 import com.example.notes.domain.useCase.MakeLoginRequestUseCase
 import com.example.notes.presentation.models.LoginResult
 import com.example.notes.presentation.models.LoginState
@@ -19,7 +21,9 @@ import java.lang.Exception
 
 class LoginFragmentViewModel @Inject constructor(
     private val makeLoginRequestUseCase: MakeLoginRequestUseCase,
-    private val getProfileListUseCase: GetProfileListUseCase
+    private val getProfileListUseCase: GetProfileListUseCase,
+    private val getProfileByIdUseCase: GetProfileByIdUseCase,
+    private val loadDataUseCase: LoadDataUseCase
 ) : ViewModel() {
 
     private val _loginState = MutableLiveData<LoginState>()
@@ -29,6 +33,8 @@ class LoginFragmentViewModel @Inject constructor(
     val loginResult: LiveData<LoginResult> = _loginResult
 
     fun getProfileList() = getProfileListUseCase()
+
+    fun getProfileById(id: String) = getProfileByIdUseCase(id)
 
     fun auth(email: String, password: String): Result<Profile> {
 

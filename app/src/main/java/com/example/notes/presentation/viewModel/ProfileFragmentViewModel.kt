@@ -2,10 +2,12 @@ package com.example.notes.presentation.viewModel
 
 import android.provider.ContactsContract
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.notes.domain.entity.Profile
 import com.example.notes.domain.useCase.GetProfileByIdUseCase
 import com.example.notes.domain.useCase.GetProfileListUseCase
+import com.example.notes.presentation.models.LoginState
 import javax.inject.Inject
 
 class ProfileFragmentViewModel @Inject constructor(
@@ -16,4 +18,5 @@ class ProfileFragmentViewModel @Inject constructor(
     fun getProfileById(id: String) = getProfileByIdUseCase(id)
 
     fun getProfileList() = getProfileListUseCase()
+
 }
